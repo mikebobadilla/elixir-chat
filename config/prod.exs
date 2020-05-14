@@ -13,6 +13,22 @@ config :elixir_chat, ElixirChatWeb.Endpoint,
   url: [host: "example.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
+config :elixir_chat, ElixirChatWeb.Endpoint,
+  load_from_system_env: true,
+  http: [port: {:system, "PORT"}], # Needed for Phoenix 1.2 and 1.4. Doesn't hurt for 1.3.
+  server: true, # Without this line, your app will not start the web server!
+  secret_key_base: "${SECRET_KEY_BASE}",
+  url: [host: "${APP_NAME}.gigalixirapp.com", port: 443],
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  version: Mix.Project.config[:version] # to bust cache during hot upgrades
+
+config :elixir_chat, ElixirChatWeb.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  url: "${DATABASE_URL}",
+  database: "",
+  ssl: true,
+  pool_size: 2
+
 # Do not print debug messages in production
 config :logger, level: :info
 
